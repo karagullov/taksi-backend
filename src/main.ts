@@ -4,10 +4,13 @@ import { App } from "./app";
 import { LoggerService } from "./logger/logger";
 import { ILogger } from "./logger/logger.interface";
 import { TYPES } from "./types";
+import { IUsersController } from "./users/users.controller.interface";
+import { UsersController } from "./users/users.controller";
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
-  appContainer.bind<ILogger>(TYPES.ILogger).to(LoggerService);
-  appContainer.bind<App>(TYPES.Application).to(App);
+  bind<ILogger>(TYPES.ILogger).to(LoggerService);
+  bind<IUsersController>(TYPES.UsersController).to(UsersController);
+  bind<App>(TYPES.Application).to(App);
 });
 
 function bootstrap() {

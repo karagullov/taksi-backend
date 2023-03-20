@@ -3,7 +3,7 @@ import { Server } from "http";
 import { inject, injectable } from "inversify";
 import { ILogger } from "./logger/logger.interface";
 import { TYPES } from "./types";
-import { usersRouter } from "./users/users";
+import { UsersController } from "./users/users.controller";
 
 @injectable()
 export class App {
@@ -11,13 +11,16 @@ export class App {
   server: Server;
   port: number;
 
-  constructor(@inject(TYPES.ILogger) private logger: ILogger) {
+  constructor(
+    @inject(TYPES.ILogger) private logger: ILogger,
+    @inject(TYPES.UsersController) private userController: UsersController
+  ) {
     this.app = express();
     this.port = 8000;
   }
 
   useRoutes() {
-    this.app.use("/users", usersRouter);
+    this.app.use("/users", this.userController.router);
   }
 
   public async init() {

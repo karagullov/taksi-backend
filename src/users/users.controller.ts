@@ -9,6 +9,7 @@ import { HTTPError } from "../errors/http-error";
 import { UserLoginDto } from "./dto/user-login.dto";
 import { UserReqisterDto } from "./dto/user-register.dto";
 import { IUserService } from "./user.service.interface";
+import { ValidateMiddleware } from "../common/validate.middleware";
 
 @injectable()
 export class UsersController
@@ -25,11 +26,13 @@ export class UsersController
         path: "/login",
         method: "post",
         func: this.login,
+        middlewares: [new ValidateMiddleware(UserLoginDto)],
       },
       {
         path: "/register",
         method: "post",
         func: this.register,
+        middlewares: [new ValidateMiddleware(UserReqisterDto)],
       },
       {
         path: "/info",

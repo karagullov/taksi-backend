@@ -5,6 +5,9 @@ import { TYPES } from "../types";
 import { ILogger } from "../logger/logger.interface";
 import { injectable } from "inversify";
 import { IUsersController } from "./users.controller.interface";
+import { HTTPError } from "../errors/http-error";
+import { UserLoginDto } from "./dto/user-login.dto";
+import { UserReqisterDto } from "./dto/user-register.dto";
 
 @injectable()
 export class UsersController
@@ -32,12 +35,21 @@ export class UsersController
     ]);
   }
 
-  login({ body }: Request, res: Response, next: NextFunction): void {
+  login(
+    { body }: Request<{}, {}, UserLoginDto>,
+    res: Response,
+    next: NextFunction
+  ): void {
     console.log("login", body);
-    res.status(200).end();
+    next(new HTTPError(401, "Not authorized"));
+    // res.status(200).end();
   }
 
-  register({ body }: Request, res: Response, next: NextFunction): void {
+  register(
+    { body }: Request<{}, {}, UserReqisterDto>,
+    res: Response,
+    next: NextFunction
+  ): void {
     console.log("register", body);
     res.status(200).end();
   }

@@ -1,4 +1,14 @@
-import { IsString } from "class-validator";
+import { IsEnum, IsString } from "class-validator";
+
+enum Cities {
+  "Джалал-Абад",
+  "Ош",
+  "Баткен",
+  "Нарын",
+  "Талас",
+  "Ыссык-кол",
+  "Бишкек",
+}
 
 export class DriverRegisterDto {
   @IsString({ message: "No phone number specified" })
@@ -13,11 +23,8 @@ export class DriverRegisterDto {
   @IsString({ message: "No car specified" })
   car: string;
 
-  @IsString({ message: "No city1 specified" })
-  city1: string;
-
-  @IsString({ message: "No city2 specified" })
-  city2: string;
+  // @IsEnum(Cities)
+  cities: string[];
 
   avatar?: string;
 }

@@ -1,44 +1,57 @@
 import { hash } from "bcryptjs";
 
-interface ICreateDriver {
-  readonly _phone: string;
-  readonly _name: string;
-  readonly _car: string;
-  readonly _city1: string;
-  readonly _city2: string;
-  readonly _avatar: string;
+interface IDriverProps {
+  phone: string;
+  name: string;
+  car: string;
+  cities: string[];
+  avatar?: string | undefined;
+  _id: string;
 }
 
 export class Driver {
   private _password: string;
+  private _phone: string;
+  private _name: string;
+  private _car: string;
+  private _cities: string[];
+  private _id: string;
+  private _avatar?: string | undefined;
 
-  constructor(private createDriverData: ICreateDriver) {}
+  constructor(model: IDriverProps) {
+    this._phone = model.phone;
+    this._name = model.name;
+    this._car = model.car;
+    this._cities = model.cities;
+    this._id = model._id;
+    this._avatar = model.avatar;
+  }
 
   public async setPassword(password: string, salt: number): Promise<void> {
     this._password = await hash(password, salt);
   }
 
   get phone(): string {
-    return this.createDriverData._phone;
+    return this._phone;
   }
 
   get name(): string {
-    return this.createDriverData._name;
+    return this._name;
   }
 
   get car(): string {
-    return this.createDriverData._car;
+    return this._car;
   }
 
-  get city1(): string {
-    return this.createDriverData._city1;
+  get cities(): string[] {
+    return this._cities;
   }
 
-  get city2(): string {
-    return this.createDriverData._city2;
+  get avatar(): string | undefined {
+    return this._avatar;
   }
 
-  get avatar(): string {
-    return this.createDriverData._avatar;
+  get id(): string {
+    return this._id;
   }
 }

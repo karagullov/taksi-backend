@@ -5,7 +5,20 @@ const driver = new Schema({
   password: { type: String, required: true },
   name: { type: String, required: true },
   car: { type: String, required: true },
-  route: { type: Object, required: true }, //route {from:'Osh', to:'Bishkek'}
+  cities: [
+    {
+      type: String,
+      // enum: [
+      //   "Джалал-Абад",
+      //   "Ош",
+      //   "Баткен",
+      //   "Нарын",
+      //   "Талас",
+      //   "Ыссык-кол",
+      //   "Бишкек",
+      // ],
+    },
+  ],
   avatar: { type: String },
 });
 

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response, response } from "express";
 import { BaseController } from "../../common/base.controller";
 import { IDriversController } from "./drivers.controller.interface";
 import { inject } from "inversify";
@@ -7,8 +7,6 @@ import { ILogger } from "../../logger/logger.interface";
 import { ValidateMiddleware } from "../../common/validate.middleware";
 import { DriverRegisterDto } from "../dto/driver-register.dto";
 import { DriverLoginDto } from "../dto/driver-login.dto";
-import { IUserService } from "../../users/user.service.interface";
-import { HTTPError } from "../../errors/http-error";
 import { IDriversService } from "../services/driver.service.interface";
 
 export class DriversController
@@ -34,21 +32,38 @@ export class DriversController
         func: this.login,
         middlewares: [new ValidateMiddleware(DriverLoginDto)],
       },
+      {
+        path: "/",
+        method: "get",
+        func: this.getAllDrivers,
+      },
     ]);
   }
 
-  login(req: Request, res: Response, next: NextFunction) {
-    console.log("login");
-    res.status(200);
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await this.driversService.validateDriver(req.body);
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
   }
 
   async register(req: Request, res: Response, next: NextFunction) {
-    const result = await this.driversService.createDriver(req.body);
-
-    if (result instanceof Error) {
-      return next(new HTTPError(422, result.message));
+    try {
+      const result = await this.driversService.createDriver(req.body);
+      res.json(result);
+    } catch (e) {
+      next(e);
     }
+  }
 
-    this.ok(res, result);
+  async getAllDrivers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await this.driversService.getAllDrivers();
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
   }
 }

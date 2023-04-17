@@ -8,6 +8,8 @@ import { ValidateMiddleware } from "../../common/validate.middleware";
 import { DriverRegisterDto } from "../dto/driver-register.dto";
 import { DriverLoginDto } from "../dto/driver-login.dto";
 import { IDriversService } from "../services/driver.service.interface";
+import { DriverAuthMiddlware } from "../middlewares/driver.auth.middleware";
+import { TokenService } from "../../services/token.service";
 
 export class DriversController
   extends BaseController
@@ -15,7 +17,8 @@ export class DriversController
 {
   constructor(
     @inject(TYPES.ILogger) private loggerService: ILogger,
-    @inject(TYPES.DriverService) private driversService: IDriversService
+    @inject(TYPES.DriverService) private driversService: IDriversService,
+    @inject(TYPES.TokenService) private tokenService: TokenService
   ) {
     super(loggerService);
 
@@ -36,6 +39,7 @@ export class DriversController
         path: "/",
         method: "get",
         func: this.getAllDrivers,
+        middlewares: [new DriverAuthMiddlware(this.tokenService)],
       },
     ]);
   }

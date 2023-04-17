@@ -44,4 +44,28 @@ export class TokenService {
     tokenData.refreshToken = refreshToken;
     return tokenData.save();
   }
+
+  validateAccessToken(accessToken: string) {
+    try {
+      const data = jwt.verify(
+        accessToken,
+        this.configService.get("JWT_ACCESS_SECRET")
+      );
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  validateRefreshToken(refreshToken: string) {
+    try {
+      const data = jwt.verify(
+        refreshToken,
+        this.configService.get("JWT_REFRESH_SECRET")
+      );
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
 }

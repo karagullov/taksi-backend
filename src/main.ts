@@ -17,10 +17,12 @@ import { DriversController } from "./drivers/controllers/drivers.controller";
 import { IDriversService } from "./drivers/services/driver.service.interface";
 import { DriversService } from "./drivers/services/driver.service";
 import { TokenService } from "./services/token.service";
+import { DriverAuthMiddlware } from "./drivers/middlewares/auth.middleware";
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
   bind<TokenService>(TYPES.TokenService).to(TokenService).inSingletonScope();
+  bind<DriverAuthMiddlware>(TYPES.DriverAuthMiddlware).to(DriverAuthMiddlware);
   bind<IUsersController>(TYPES.UsersController).to(UsersController);
   bind<IDriversController>(TYPES.DriversController).to(DriversController);
   bind<IExeptionFilter>(TYPES.ExeptionFilter).to(ExeptionFilter);
